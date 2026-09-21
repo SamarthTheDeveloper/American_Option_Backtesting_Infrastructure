@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package test;
+
+service Delivery {
+    rpc Send (TextRequest) returns (TextResponse);
+    rpc Chat (stream TextRequest) returns (stream TextResponse);
+}
+
+message TextRequest {
+    string text = 1;
+}
+
+message TextResponse {
+    string text = 1;
+}

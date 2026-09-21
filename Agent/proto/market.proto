@@ -1,0 +1,65 @@
+syntax = "proto3";
+
+package market;
+
+service Market {
+  rpc Next (stream ProgRequest) returns (stream ProgStatus);
+}
+
+message ProgRequest {
+  string time = 1;
+  int32 comp_dur = 2;
+
+}
+
+message ProgStatus {
+  string time = 1;
+  Account account = 2;
+  bytes data_tensor = 3;
+  bytes orders = 4;
+}
+
+message Account {
+  float funds = 1;
+  repeated Position positions = 2;
+}
+
+message Position {
+  Instrument instrument = 1;
+  sint32 quantity = 2;
+  float average_open_px = 3;
+  float current_mark = 4;
+}
+
+message Instrument {
+  Ticker ticker = 1;
+  string expiration_date = 2;
+  float strike = 3;
+  Contract option = 4;
+}
+
+enum Contract {
+  Call = 0;
+  Put = 1;
+}
+
+enum Ticker {
+    AFRM = 0;
+    HOOD = 1;
+    NFLX = 2;
+    DAL = 3;
+    UAL = 4;
+    CVS = 5;
+    GM = 6;
+    PDD = 7;
+    CCJ = 8;
+    XBI = 9;
+    XHB = 10;
+    EEM = 11;
+    KO = 12;
+    ZEIM = 13;
+    TEVA = 14;
+    SMCI = 15;
+    AA = 16;
+    BMY = 17;
+}

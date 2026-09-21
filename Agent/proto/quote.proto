@@ -1,0 +1,46 @@
+syntax = "proto3";
+
+package quote;
+
+service Quote {
+    rpc GetQuote (QuoteRequest) returns (QuoteResponse);
+    rpc StreamChain (stream ChainRequest) returns (stream QuoteResponse);
+
+}
+
+message Distribution {
+    float mean = 1;
+    float std = 2;
+}
+
+message QuoteSearchRequest {
+    string symbol = 1;
+    string contract= 2;
+    optional Distribution iv = 3;
+    optional Distribution strike = 4;
+    optional Distribution delta = 6;
+    optional Distribution gamma = 7;
+    optional Distribution theta = 8;
+}
+
+message ChainRequest {
+    string symbol = 1;
+    string expiration = 2;
+}
+
+message QuoteRequest {
+    string symbol = 1;
+}
+
+message QuoteResponse {
+    string contract = 1;
+    float strike = 2;
+    float bid = 3;
+    float ask = 4;
+    float iv = 5;
+    float delta = 6;
+    float gamma = 7;
+    float theta = 8;
+    float vega = 9;
+    float rho = 10;
+}

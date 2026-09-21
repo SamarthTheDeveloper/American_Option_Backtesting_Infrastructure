@@ -1,0 +1,17 @@
+# GPU (CUDA 13) deployment stack — for linux/amd64 hosts with NVIDIA GPUs.
+# CUDA libraries come bundled as pip wheels (nvidia-*-cu13)
+# Host only needs the NVIDIA driver + nvidia-container-toolkit.
+
+
+jax[cuda13]==0.10.2
+grpcio==1.78.0
+flax[cuda13]==0.12.6
+numpyro==0.21.0
+
+# Common scientific stack
+numpy
+scipy
+pandas
+matplotlib
+tqdm
+tensorboard
