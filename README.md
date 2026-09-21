@@ -70,13 +70,11 @@ $$
 V_{\text{ext}} = V - \max(S - K,\, 0) \quad \text{(call)}, \qquad V_{\text{ext}} = V - \max(K - S,\, 0) \quad \text{(put)}.
 $$
 
-### Reward
+### Reward, Training, and Architecture 
 
-The default per-step reward is the change in mark-to-market equity net of transaction costs:
+When considering the reward, you have to consider the long-term results of your actions. Based on the literature, I would like to do some kind of REINFORCE algorithm with eligibility tracing and bootstrapped returns; unfortunately, these don't play as well with deep generative models. The modern literature prefers PPO and GAE, and that is what I plan to use. For those familiar with Richard Sutton's book like me, Gen Advantage Estm is eligibility tracing, but forward-looking, so you calculate it after the episode finishes instead of at each step. Flow is best described as a nested bijection that allows us to find an unknown distribution from a simpler known one, where the flow model itself, parameterized by its weights, operates as that distribution itself that we sample from. The core problem here is making a neural network necessarily invertible, which Jakob walks through mathematically and with his code, which was a major help in making this remotely feasible for me. Now my specific case, you'll notice in the code that there is this  self.h field in the flow network; this represents the state vector. During an episode, at each step we calculate the forward pass given the state to get the action and density, which we store, and so on for the episode. We then calculate the advantage for each action after the episode finishes and take the weighted some of Advantage and Density over all actions taken in the episode to get our equivalent of the cumulative reward.
 
-$$
-r_t = \left(E_t - E_{t-1}\right) - c_t,
-$$
+
 
 where $E_t$ is account equity marked at mid and $c_t$ includes the half-spread paid and commissions. Optional shaping terms (drawdown penalty, Greek-exposure penalties) are configurable.
 
@@ -211,18 +209,12 @@ enum Ticker {
 
 ```
 
-**Session lifecycle**
-
-1. Client opens `Session` and sends `Reset { seed, config_name }`.
-2. Server replies with the initial `ServerMessage` (reward $0$, `done = false`).
-3. Client sends an `Action`; server steps and replies. Repeat.
-4. On `done = true` the client may send another `Reset` on the same stream or close it.
 
 ---
 
 ## Networking: Home Server ↔ VPS ↔ Cloud GPU
 
-The simulator runs on a home machine with no public inbound port. The GPU instances are rented, container-based, and have no TUN device, so a VPN is not an option. 
+The simulator runs on a home machine with no public inbound port. The GPU instances are rented, container-based, and have no TUN device, so a VPN is not an option. Alternatively, buying a domain for the server is the easier option but not necessarily the cheaper. Which is why I present this option.
 
 ```
 home server  --(reverse SSH tunnel)-->  VPS  <--(gRPC)--  cloud GPU (Python client)
@@ -276,28 +268,9 @@ python -m agent.train --server localhost:50051 --num-envs 64
 ```bash
 python -m grpc_tools.protoc -I ../proto \
   --python_out=agent/proto --grpc_python_out=agent/proto \
-  ../proto/backtester.proto
+  ../proto/market.proto \ //.promot/quote.proto etc
 ```
 
-### Minimal client example
-
-```python
-
-```
-
----
-
-## Configuration
-
-Scenario presets control:
-
-| Key | Description |
-|---|---|
-| `garch` | $\omega, \alpha, \gamma, \beta$ and innovation distribution |
-| `svi` | Initial slice parameters and term-structure shape |
-| `chain` | Strike grid, expiries listed, step size (e.g. daily / intraday) |
-
----
 
 ## Roadmap
 
