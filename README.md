@@ -98,7 +98,7 @@ $$
 Each expiry slice is parameterized in total implied variance $w(k) = \sigma_{\text{imp}}^2(k)\,T$ as a function of log-moneyness $k = \ln(K/F)$ using raw SVI:
 
 $$
-w(k) = a + b\left\{\rho\,(k - m) + \sqrt{(k - m)^2 + \sigma^2}\right\}.
+w(k) = a + b \{\rho\,(k - m) + \sqrt{(k - m)^2 + \sigma^2}\right\}.
 $$
 
 Parameters are constrained to avoid butterfly and calendar arbitrage.
