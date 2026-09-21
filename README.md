@@ -98,7 +98,7 @@ $$
 Each expiry slice is parameterized in total implied variance $w(k) = \sigma_{\text{imp}}^2(k)\,T$ as a function of log-moneyness $k = \ln(K/F)$ using raw SVI:
 
 $$
-w(k) = a + b \{\rho\,(k - m) + \sqrt{(k - m)^2 + \sigma^2}\right\}.
+w(k) = a + b \{\rho\,(k - m) + \sqrt{(k - m)^2 + \sigma^2}\}.
 $$
 
 Parameters are constrained to avoid butterfly and calendar arbitrage.
@@ -108,7 +108,7 @@ Parameters are constrained to avoid butterfly and calendar arbitrage.
 Each expiry slice is parameterized in total implied variance $w(k) = \sigma_{\text{imp}}^2(k)\,T$ as a function of log-moneyness $k = \ln(K/F)$ using raw SVI:
  
 $$
-w(k) = a + b\left\{\rho\,(k - m) + \sqrt{(k - m)^2 + \sigma^2}\right\}.
+w(k) = a + b\{\rho\,(k - m) + \sqrt{(k - m)^2 + \sigma^2}\}.
 $$
  
 Parameters are constrained to avoid butterfly and calendar arbitrage. SVI is the single source of truth for implied volatility: at each step the slice parameters are updated conditional on the underlying's GJR-GARCH state, and the resulting surface feeds directly into American pricing.
